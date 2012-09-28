@@ -1,6 +1,7 @@
 source :rubygems
 
-group :development do
+group :development, :test do
+  gem 'rake'
   gem 'rspec'
   gem 'rspec-core'
   gem 'guard'
