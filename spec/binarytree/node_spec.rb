@@ -38,7 +38,7 @@ module Binarytree
 
         it "should be inserted at the root" do
           subject.value.should == 5
-          subject.parent.should == nil
+          subject.parent.should be_nil
         end
 
         it { should be_leaf }
@@ -62,14 +62,14 @@ module Binarytree
           it "should be inserted on the right" do
             subject.right_child.should_not be_empty
             subject.right_child.value.should == 10
-            subject.left_child.should == nil
+            subject.left_child.should be_nil
           end
 
           it "should have a height of 1" do
             subject.should_not be_empty
             subject.right_child.should_not be_nil
             subject.right_child.should be_leaf
-            subject.left_child.should == nil
+            subject.left_child.should be_nil
 
             subject.height.should == 1
           end
@@ -85,7 +85,7 @@ module Binarytree
           it "should be inserted on the left" do
             subject.left_child.should_not be_empty
             subject.left_child.value.should == 1
-            subject.right_child.should == nil
+            subject.right_child.should be_nil
           end
 
           it "should have a height of 1" do
@@ -181,45 +181,185 @@ module Binarytree
       end
     end
 
+    describe "#root" do
+      subject { Node.new 10 }
+
+      context "Empty tree" do
+        it "should return self" do
+          subject.root.should == subject
+        end
+      end
+
+      context "Tree with one element" do
+        before(:each) do
+          subject.parent = Node.new(20)
+        end
+
+        it "should return subject's parent" do
+          subject.root.should == subject.parent
+        end
+      end
+
+      context "Tree with more than one element" do
+
+        it "should return the same root for each descendant" do
+          5.times.map do |i|
+            node = subject.add(i)
+            node.root.should == subject
+          end
+        end
+      end
+
+    end
+    describe "#depth" do
+      context "Empty tree" do
+        subject { Node.new }
+
+        it "should have a depth of 0" do
+          subject.depth.should == 0
+        end
+
+      end
+
+      context "Not empty tree" do
+        subject do
+          parent = Node.new(10)
+          Node.new(4).tap {|n| n.parent = parent }
+        end
+
+        it "should have a depth of 1" do
+          subject.depth.should == 1
+        end
+
+        it "should have a depth of 2" do
+          subject.parent.parent = Node.new(20)
+          subject.depth.should == 2
+        end
+
+        it "should still have a depth of 2 after adding a child" do
+          subject.parent.parent = Node.new(20)
+          subject.add(2)
+          subject.depth.should == 2
+        end
+      end
+    end
+
+    describe "#height" do
+      context "Empty tree" do
+        subject { Node.new }
+
+        it "should have a height of -1" do
+          subject.height.should == -1
+        end
+      end
+
+      context "Tree with one element" do
+        subject { Node.new 10 }
+
+        it "should have a height of 0" do
+          subject.height.should == 0
+        end
+      end
+
+      context "Tree with more than one element" do
+        subject { Node.new(10).tap { |n| n.add 4 } }
+
+        context "Tree's root" do
+          it "should have a height of 1 after initialization" do
+            subject.height.should == 1
+          end
+
+          it "should have a height of 1 after adding a new element at the same depth" do
+            subject.add 15
+            subject.height.should == 1
+          end
+
+          it "should have a height of 2 after adding a child on the right" do
+            subject.add 15
+            subject.add 20
+            subject.height.should == 2
+          end
+        end
+
+        context "Nodes in a tree ('initial' option)" do
+
+          it "should return a height of 2 for the parent of a leaf's parent" do
+            subject.add 15
+            node = subject.add 20
+            subject.add 25
+            subject.add 30
+
+            node.should_not be_leaf
+            node.height(initial: true).should == 2
+          end
+
+          it "should return a height of 1 for the parent of a leaf" do
+            subject.add 15
+            node = subject.add 20
+            subject.add 30
+
+            node.should_not be_leaf
+            node.height(initial: true).should == 1
+          end
+
+          it "should return a height of 0 for a leaf" do
+            subject.add 15
+            subject.add 20
+            node = subject.add 30
+
+            node.should be_leaf
+            node.height(initial: true).should == 0
+          end
+        end
+      end
+
+    end
+
     describe "#find" do
       context "A value which is not present in the tree" do
-
+        it "should raise an Exception"
       end
 
       context "The minimum value of the tree" do
-
+        it "should return the correct value"
       end
 
       context "The maximum value of the tree" do
-
+        it "should return the correct value"
       end
 
       context "A value which is lower than the root's value" do
-
+        it "should return the correct value"
       end
 
       context "A value which is greater than the root" do
-
+        it "should return the correct value"
       end
     end
 
     describe "#delete" do
       context "The root value" do
+        it "should delete the value"
       end
 
       context "A value which is not present in the tree" do
+        it "should raise an Exception"
       end
 
       context "The minimum value of the tree" do
+        it "should delete the value"
       end
 
       context "The maximum value of the tree" do
+        it "should delete the value"
       end
 
       context "A value which is lower than the root's value" do
+        it "should delete the value"
       end
 
       context "A value which is greater than the root" do
+        it "should delete the value"
       end
     end
 
