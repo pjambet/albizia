@@ -43,23 +43,20 @@ module Albizia
     #   initial : this will mark the current node as a root.
     #
     def height(opts={})
+      current_height = (root? || opts[:initial]) ? 0 : 1
+
       if empty?
         -1
       elsif (root? && leaf?) || (opts[:initial] && leaf?)
         0
       elsif leaf?
         1
+      elsif @left_child.nil?
+        current_height + @right_child.height
+      elsif @right_child.nil?
+        current_height + @left_child.height
       else
-        current_height = (root? || opts[:initial]) ? 0 : 1
-        if @left_child.nil? && @right_child != nil
-          current_height + @right_child.height
-        elsif @left_child != nil && @right_child.nil?
-          current_height + @left_child.height
-        elsif @left_child != nil && @right_child != nil
-          current_height + [@left_child.height, @right_child.height].max
-        else
-          raise "Unhandled depth case"
-        end
+        current_height + [@left_child.height, @right_child.height].max
       end
     end
 
@@ -91,7 +88,9 @@ module Albizia
 
     # The size of a node is the number of descendants it has including itself.
     def size
-      if leaf?
+      if empty?
+        0
+      elsif leaf?
         1
       elsif @left_child.nil?
         1 + @right_child.size
@@ -143,18 +142,14 @@ module Albizia
       if empty?
         @value = v
       elsif v > @value
-        if(@right_child.nil?)
-          node = Node.new(v).tap { |n| n.parent = self }
-          @right_child = node
-          # return node
+        if @right_child.nil?
+          insert_node :right, v
         else
           @right_child.add(v)
         end
       else
         if @left_child.nil?
-          node = Node.new(v).tap { |n| n.parent = self }
-          @left_child = node
-          # return node
+          insert_node :left, v
         else
           @left_child.add(v)
         end
@@ -204,6 +199,14 @@ module Albizia
     def draw
 
     end
+
+    private
+
+    def insert_node(direction, v)
+      new_node = Node.new(v).tap { |n| n.parent = self }
+      send :"#{direction}_child=", new_node
+    end
+
 
   end #class
 end #module

@@ -312,7 +312,47 @@ module Albizia
           end
         end
       end
+    end
 
+    describe "#height" do
+      context "Empty tree" do
+        subject { Node.new }
+
+        it "should have a size of 0" do
+          subject.size.should == 0
+        end
+      end
+
+      context "Tree with one element" do
+        subject { Node.new 5 }
+
+        it "should have a size of 1" do
+          subject.size.should == 1
+        end
+      end
+
+      context "Not empty tree" do
+        subject { Node.new 4 }
+
+        it "should have a size of 2" do
+          subject.add 10
+          subject.size.should == 2
+        end
+
+        it "should have a size of 3 after adding an element" do
+          subject.add 10
+          subject.add 20
+
+          subject.size.should == 3
+        end
+
+        it "should have a size of 4 after adding another child" do
+          subject.add 10
+          subject.add 20
+          subject.add 2
+          subject.size.should == 4
+        end
+      end
     end
 
     describe "#find" do
