@@ -149,6 +149,12 @@ img {
   border: 1px solid #ccc;
 }
 
+img.travis {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
 
 /* Code blocks */
 
