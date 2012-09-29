@@ -1,4 +1,5 @@
-module Binarytree
+
+module Albizia
   class Node
 
     attr_accessor :left_child, :right_child, :value, :parent

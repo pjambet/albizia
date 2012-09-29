@@ -1,6 +1,6 @@
 require "spec_helper"
 
-module Binarytree
+module Albizia
   describe Node do
     describe "#init" do
       context "Without params" do

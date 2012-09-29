@@ -1,5 +1,4 @@
-
-module Binarytree
+module Albizia
   class Tree
 
     attr_accessor :root

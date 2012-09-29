@@ -1,6 +1,6 @@
 require "spec_helper"
 
-module Redblack
+module Albizia
   describe RBNode do
 
   end
