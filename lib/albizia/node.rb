@@ -262,6 +262,25 @@ module Albizia
 
     end
 
+    def traverse &block
+      left_child.traverse(&block) if left_child
+      yield @value
+      right_child.traverse(&block) if right_child
+    end
+    alias_method :in_order_traverse, :traverse
+
+    def pre_order_traverse &block
+      yield @value
+      left_child.traverse(&block) if left_child
+      right_child.traverse(&block) if right_child
+    end
+
+    def post_order_traverse &block
+      left_child.traverse(&block) if left_child
+      right_child.traverse(&block) if right_child
+      yield @value
+    end
+
     def >(other)
       @value > other.value
     end
