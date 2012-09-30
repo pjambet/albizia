@@ -365,50 +365,114 @@ module Albizia
     end
 
     describe "#find" do
+      subject do
+        Node.new(5).tap do |n|
+          n.add 2
+          n.add 4
+          n.add 10
+          n.add 15
+        end
+      end
+
       context "A value which is not present in the tree" do
-        it "should raise an Exception"
+        it "should raise an Exception" do
+          lambda { subject.find(3) }.should raise_error NodeNotFoundError
+        end
       end
 
       context "The minimum value of the tree" do
-        it "should return the correct value"
+        it "should return the correct value" do
+          node = subject.add 1
+          subject.find(1).should == node
+        end
       end
 
       context "The maximum value of the tree" do
-        it "should return the correct value"
+        it "should return the correct value" do
+          node = subject.add 20
+          subject.find(20).should == node
+        end
       end
 
       context "A value which is lower than the root's value" do
-        it "should return the correct value"
+        it "should return the correct value" do
+          node = subject.add 3
+          subject.find(3).should == node
+        end
       end
 
       context "A value which is greater than the root" do
-        it "should return the correct value"
+        it "should return the correct value"do
+          node = subject.add 12
+          subject.find(12).should == node
+        end
       end
     end
 
     describe "#delete" do
+      subject do
+        Node.new 5
+      end
+
       context "The root value" do
-        it "should delete the value"
+        it "should delete the value" do
+          node = subject.add 2
+          subject.delete 2
+          lambda { subject.find 2 }.should raise_error NodeNotFoundError
+          subject.size.should == 1
+          subject.should be_root
+          subject.should be_leaf
+        end
       end
 
       context "A value which is not present in the tree" do
-        it "should raise an Exception"
+        it "should raise an Exception" do
+          lambda { subject.find 2 }.should raise_error NodeNotFoundError
+        end
       end
 
       context "The minimum value of the tree" do
-        it "should delete the value"
+        it "should delete the value" do
+          node = subject.add 2
+          node = subject.add 15
+          node = subject.add 10
+          subject.delete 2
+          lambda { subject.find 2 }.should raise_error NodeNotFoundError
+          subject.size.should == 3
+        end
       end
 
       context "The maximum value of the tree" do
-        it "should delete the value"
+        it "should delete the value" do
+          node = subject.add 2
+          node = subject.add 15
+          node = subject.add 20
+          subject.delete 20
+          lambda { subject.find 20 }.should raise_error NodeNotFoundError
+          subject.size.should == 3
+        end
       end
 
       context "A value which is lower than the root's value" do
-        it "should delete the value"
+        it "should delete the value" do
+          node = subject.add 2
+          node = subject.add 4
+          node = subject.add 20
+          subject.delete 4
+          lambda { subject.find 4 }.should raise_error NodeNotFoundError
+          subject.size.should == 3
+        end
       end
 
       context "A value which is greater than the root" do
-        it "should delete the value"
+        it "should delete the value" do
+          node = subject.add 2
+          node = subject.add 10
+          node = subject.add 12
+          subject.delete 10
+          lambda { subject.find 10 }.should raise_error NodeNotFoundError
+          subject.size.should == 3
+        end
       end
     end
 

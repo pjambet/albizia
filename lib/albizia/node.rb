@@ -1,7 +1,9 @@
 
 module Albizia
 
-  AlreadyExistingNode = Class.new(StandardError)
+  # Define exceptions
+  AlreadyExistingNodeException = Class.new(StandardError)
+  NodeNotFoundError            = Class.new(StandardError)
 
   class Node
 
@@ -69,24 +71,6 @@ module Albizia
         current_height + @left_child.height
       else
         current_height + [@left_child.height, @right_child.height].max
-      end
-    end
-
-    def >(other)
-      @value > other.value
-    end
-
-    def <(other)
-      @value < other.value
-    end
-
-    def <=>(other)
-      if @value < other.value
-        -1
-      elsif @value == other.value
-        0
-      else
-        1
       end
     end
 
@@ -184,6 +168,55 @@ module Albizia
     alias_method :<<, :add
 
     #
+    # Returns the node with value v if it exists
+    #
+    def find(v)
+      raise_not_found = lambda { raise NodeNotFoundError.new }
+      if empty?
+        raise_not_found.call
+      elsif leaf? && @value != v
+        raise_not_found.call
+      elsif @value == v
+        self
+      elsif v < @value
+        @left_child.nil? ? raise_not_found.call : @left_child.find(v)
+      else
+        @right_child.nil? ? raise_not_found.call : @right_child.find(v)
+      end
+    end
+
+    #
+    # Delete the node with the given value
+    #
+    def delete(v)
+      # TODO
+      if leaf? && @value != v
+        raise NodeNotFoundError.new
+      elsif @value == v
+        new_child = if @left_child != nil && @right_child != nil
+          @left_child.parent = parent
+          @right_child.parent = @left_child
+        elsif @left_child != nil
+          @left_child.parent = parent
+          @left_child
+        elsif @right_child != nil
+          @right_child.parent = parent
+          @right_child
+        end
+        if @parent != nil
+          @value < @parent.value ? @parent.left_child = new_child : @parent.right_child = new_child
+        end
+        %w(parent left_child right_child).each do |attr|
+          send :"#{attr}=", nil
+        end
+      elsif v < @value
+        @left_child.delete v
+      elsif v >= @value
+        @right_child.delete v
+      end
+    end
+
+    #
     # Traverse the tree and returns the list of elements
     # For the following tree :
     #
@@ -193,7 +226,7 @@ module Albizia
     #     / \
     #    6  12
     #
-    # It return [2, 5, 6, 10, 12]
+    # It returns [2, 5, 6, 10, 12]
     #
     def to_a
 
@@ -227,6 +260,24 @@ module Albizia
     #
     def draw
 
+    end
+
+    def >(other)
+      @value > other.value
+    end
+
+    def <(other)
+      @value < other.value
+    end
+
+    def <=>(other)
+      if @value < other.value
+        -1
+      elsif @value == other.value
+        0
+      else
+        1
+      end
     end
 
     private
