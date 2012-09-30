@@ -37,6 +37,7 @@ module Albizia
         before(:each) { subject.add(5) }
 
         it "should be inserted at the root" do
+
           subject.value.should == 5
           subject.parent.should be_nil
         end
@@ -175,6 +176,14 @@ module Albizia
             it "should have a height of 2" do
               subject.height.should == 2
             end
+          end
+        end
+
+        context "Private method #insert_node" do
+          it "should call the method 6 times" do
+            node = Node.new 5
+            node.expects(:insert_node).times(6)
+            6.times { |i| node.add i}
           end
         end
 

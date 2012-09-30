@@ -1,5 +1,8 @@
 
 module Albizia
+
+  AlreadyExistingNode = Class.new(StandardError)
+
   class Node
 
     attr_accessor :left_child, :right_child, :value, :parent
@@ -13,28 +16,37 @@ module Albizia
       leaf? && @value.nil?
     end
 
+    #
     # A leaf node has no children
+    #
     def leaf?
       @left_child.nil? && @right_child.nil?
     end
 
+    #
     # A root has no parent
+    #
     def root?
       @parent.nil?
     end
 
+    #
     # Return the root element of the tree
+    #
     def root
       root? ? self : @parent.root
     end
 
+    #
     # The depth of a node n is the length of the path from the root to the node.
     # The set of all nodes at a given depth is sometimes called a level of the
     # tree. The root node is at depth zero.
+    #
     def depth
       root? ? 0 : 1 + parent.depth
     end
 
+    #
     # The height of a tree is the length of the path from the root to the
     # deepest node in the tree. A (rooted) tree with only one node (the root)
     # has a height of zero.
@@ -78,15 +90,21 @@ module Albizia
       end
     end
 
+    #
     # Siblings are nodes that share the same parent node.
+    #
     def siblings
     end
 
+    #
     # All nodes above current node
+    #
     def ancestors
     end
 
+    #
     # The size of a node is the number of descendants it has including itself.
+    #
     def size
       if empty?
         0
@@ -101,7 +119,9 @@ module Albizia
       end
     end
 
+    #
     # A tree is full if every nodes except leaves has 2 children
+    #
     def full?
     end
 
@@ -111,7 +131,9 @@ module Albizia
     def degenerated?
     end
 
+    #
     # Return the highest value in the tree
+    #
     def max
       if @right_child.nil?
         if empty?
@@ -124,7 +146,9 @@ module Albizia
       end
     end
 
+    #
     # Return the lowest value in the tree
+    #
     def min
       if @left_child.nil?
         if empty?
@@ -137,7 +161,9 @@ module Albizia
       end
     end
 
+    #
     # Add a node with value equals to v in the tree
+    #
     def add(v)
       if empty?
         @value = v
@@ -157,6 +183,7 @@ module Albizia
     end
     alias_method :<<, :add
 
+    #
     # Traverse the tree and returns the list of elements
     # For the following tree :
     #
@@ -172,6 +199,7 @@ module Albizia
 
     end
 
+    #
     # Traverse the tree and return elements in a hash:
     # For the following tree :
     #
@@ -187,6 +215,7 @@ module Albizia
 
     end
 
+    #
     # Draw the tree in the console
     # example :
     #
@@ -203,6 +232,7 @@ module Albizia
     private
 
     def insert_node(direction, v)
+      raise AlreadyExistingNode.new if send(:"#{direction}_child") != nil
       new_node = Node.new(v).tap { |n| n.parent = self }
       send :"#{direction}_child=", new_node
     end
