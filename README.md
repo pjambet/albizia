@@ -7,8 +7,15 @@ basic tree implementation
 Installation
 =
 
-`gem install albizia`
-or add
-`gem 'albizia'`
+```ruby
+gem install albizia
+```
+or simply add 
+```ruby
+gem 'albizia'
+```
 to your Gemfile
+
+Getting started
+=
 
