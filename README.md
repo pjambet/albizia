@@ -8,6 +8,7 @@ Installation
 =
 
 `gem install albizia`
-or add 
+or add
 `gem 'albizia'`
-to your gemfile
+to your Gemfile
+
