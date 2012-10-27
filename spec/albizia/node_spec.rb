@@ -417,16 +417,19 @@ module Albizia
       context "The root value" do
         it "should delete the value" do
           node = subject.add 2
-          subject.delete 2
+          deleted_node = subject.delete 2
           lambda { subject.find 2 }.should raise_error NodeNotFoundError
           subject.size.should == 1
           subject.should be_root
           subject.should be_leaf
+          deleted_node.parent.should be_nil
+          deleted_node.left_child.should be_nil
+          deleted_node.right_child.should be_nil
         end
       end
 
       context "A value which is not present in the tree" do
-        it "should raise an Exception" do
+        it "should raise a NodeNotFoundError Exception" do
           lambda { subject.find 2 }.should raise_error NodeNotFoundError
         end
       end
@@ -436,9 +439,12 @@ module Albizia
           node = subject.add 2
           node = subject.add 15
           node = subject.add 10
-          subject.delete 2
+          deleted_node = subject.delete 2
           lambda { subject.find 2 }.should raise_error NodeNotFoundError
           subject.size.should == 3
+          deleted_node.parent.should be_nil
+          deleted_node.left_child.should be_nil
+          deleted_node.right_child.should be_nil
         end
       end
 
@@ -447,9 +453,12 @@ module Albizia
           node = subject.add 2
           node = subject.add 15
           node = subject.add 20
-          subject.delete 20
+          deleted_node = subject.delete 20
           lambda { subject.find 20 }.should raise_error NodeNotFoundError
           subject.size.should == 3
+          deleted_node.parent.should be_nil
+          deleted_node.left_child.should be_nil
+          deleted_node.right_child.should be_nil
         end
       end
 
@@ -458,9 +467,12 @@ module Albizia
           node = subject.add 2
           node = subject.add 4
           node = subject.add 20
-          subject.delete 4
+          deleted_node = subject.delete 4
           lambda { subject.find 4 }.should raise_error NodeNotFoundError
           subject.size.should == 3
+          deleted_node.parent.should be_nil
+          deleted_node.left_child.should be_nil
+          deleted_node.right_child.should be_nil
         end
       end
 
@@ -469,9 +481,12 @@ module Albizia
           node = subject.add 2
           node = subject.add 10
           node = subject.add 12
-          subject.delete 10
+          deleted_node = subject.delete 10
           lambda { subject.find 10 }.should raise_error NodeNotFoundError
           subject.size.should == 3
+          deleted_node.parent.should be_nil
+          deleted_node.left_child.should be_nil
+          deleted_node.right_child.should be_nil
         end
       end
     end

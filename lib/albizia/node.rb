@@ -187,28 +187,13 @@ module Albizia
 
     #
     # Delete the node with the given value
+    # return the deleted node
     #
     def delete(v)
-      # TODO
       if leaf? && @value != v
         raise NodeNotFoundError.new
       elsif @value == v
-        new_child = if @left_child != nil && @right_child != nil
-          @left_child.parent = parent
-          @right_child.parent = @left_child
-        elsif @left_child != nil
-          @left_child.parent = parent
-          @left_child
-        elsif @right_child != nil
-          @right_child.parent = parent
-          @right_child
-        end
-        if @parent != nil
-          @value < @parent.value ? @parent.left_child = new_child : @parent.right_child = new_child
-        end
-        %w(parent left_child right_child).each do |attr|
-          send :"#{attr}=", nil
-        end
+        remove_node
       elsif v < @value
         @left_child.delete v
       elsif v >= @value
@@ -307,6 +292,41 @@ module Albizia
       send :"#{direction}_child=", new_node
     end
 
+    #
+    #
+    #
+    def remove_node
+      new_child = if @left_child != nil && @right_child != nil
+        @left_child.parent = parent
+        @right_child.parent = @left_child
+      elsif @left_child != nil
+        @left_child.parent = parent
+        @left_child
+      elsif @right_child != nil
+        @right_child.parent = parent
+        @right_child
+      end
+
+      if @parent != nil
+        if @value < @parent.value
+          @parent.left_child = new_child
+        else
+          @parent.right_child = new_child
+        end
+      end
+      detach
+    end
+
+    #
+    # Delete all current links (parent & children)
+    #
+    def detach
+      self.tap do
+        %w(parent left_child right_child).each do |attr|
+          send :"#{attr}=", nil
+        end
+      end
+    end
 
   end #class
 end #module
