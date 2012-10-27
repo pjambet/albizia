@@ -414,6 +414,10 @@ module Albizia
         Node.new 5
       end
 
+      after(:each) do
+        subject.should be_valid
+      end
+
       context "The root value" do
         it "should delete the value" do
           node = subject.add 2
@@ -487,6 +491,38 @@ module Albizia
           deleted_node.parent.should be_nil
           deleted_node.left_child.should be_nil
           deleted_node.right_child.should be_nil
+        end
+      end
+    end
+
+    describe "ordered?" do
+      subject do
+        Node.new 10
+      end
+
+      context "list with one element" do
+        it 'should be ordered' do
+          subject.should be_ordered
+        end
+      end
+
+      context "list with more than one element" do
+
+        context "ordered list" do
+          it 'should be ordered' do
+            subject.add 5
+            subject.add 15
+            subject.should be_ordered
+          end
+        end
+
+        context "unordered list" do
+          it 'should be ordered' do
+            subject.add 5
+            subject.add 15
+            subject.left_child.value = 20
+            subject.should_not be_ordered
+          end
         end
       end
     end

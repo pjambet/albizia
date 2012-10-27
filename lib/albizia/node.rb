@@ -50,7 +50,7 @@ module Albizia
 
     #
     # The height of a tree is the length of the path from the root to the
-    # deepest node in the tree. A (rooted) tree with only one node (the root)
+    # deepest node in the tree. A rooted tree with only one node (the root)
     # has a height of zero.
     #
     # Available options :
@@ -249,13 +249,13 @@ module Albizia
 
     def traverse &block
       left_child.traverse(&block) if left_child
-      yield @value
+      block_given? ? yield( @value ) : puts( @value )
       right_child.traverse(&block) if right_child
     end
     alias_method :in_order_traverse, :traverse
 
     def pre_order_traverse &block
-      yield @value
+      block_given? ? yield( @value ) : puts( @value )
       left_child.traverse(&block) if left_child
       right_child.traverse(&block) if right_child
     end
@@ -263,7 +263,7 @@ module Albizia
     def post_order_traverse &block
       left_child.traverse(&block) if left_child
       right_child.traverse(&block) if right_child
-      yield @value
+      block_given? ? yield( @value ) : puts( @value )
     end
 
     def >(other)
@@ -282,6 +282,19 @@ module Albizia
       else
         1
       end
+    end
+
+    def valid?
+      ordered?
+    end
+
+    def ordered?
+      list = []
+      traverse { |v| list << v }
+      0..(list.size - 1).times do |i|
+        return false if list[i] > list[i + 1]
+      end
+      true
     end
 
     private
