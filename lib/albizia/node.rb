@@ -120,11 +120,7 @@ module Albizia
     #
     def max
       if @right_child.nil?
-        if empty?
-          nil
-        else
-          self
-        end
+        empty? ? nil : self
       else
         @right_child.max
       end
@@ -135,11 +131,7 @@ module Albizia
     #
     def min
       if @left_child.nil?
-        if empty?
-          nil
-        else
-          self
-        end
+        empty? ? nil : self
       else
         @left_child.min
       end
