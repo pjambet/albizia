@@ -1,4 +1,4 @@
-source :rubygems
+source 'https://rubygems.org'
 
 group :development, :test do
   gem 'rake'
@@ -9,4 +9,5 @@ group :development, :test do
   gem 'guard'
   gem 'guard-rspec'
   gem 'rb-fsevent', require: false
+  gem 'coveralls', require: false
 end
