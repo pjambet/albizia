@@ -133,7 +133,7 @@ module Albizia
       context "Tree with one element" do
         before(:each) { subject.parent = Node.new(20) }
 
-        its(:root) { should == subject.parent }
+        it { subject.root.should == subject.parent }
       end
 
       context "Tree with more than one element" do
