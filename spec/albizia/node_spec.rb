@@ -259,35 +259,41 @@ module Albizia
       context "Empty tree" do
         subject { Node.new }
 
-        it { subject.size.should == 0 }
+        its(:size) { should == 0 }
       end
 
       context "Tree with one element" do
         subject { Node.new 5 }
 
-        it { subject.size.should == 1 }
+        its(:size) { should == 1 }
       end
 
       context "Not empty tree" do
         subject { Node.new 4 }
 
-        it "should have a size of 2" do
-          subject.add 10
-          subject.size.should == 2
+        context ' with 2 elements ' do
+          before(:each) { subject.add 10 }
+
+          its(:size) { should == 2 }
         end
 
-        it "should have a size of 3 after adding an element" do
-          subject.add 10
-          subject.add 20
+        context "should have a size of 3 after adding an element" do
+          before(:each) do
+            subject.add 10
+            subject.add 20
+          end
 
-          subject.size.should == 3
+          its(:size) { should == 3 }
         end
 
-        it "should have a size of 4 after adding another child" do
-          subject.add 10
-          subject.add 20
-          subject.add 2
-          subject.size.should == 4
+        context "should have a size of 4 after adding another child" do
+          before(:each) do
+            subject.add 10
+            subject.add 20
+            subject.add 2
+          end
+
+          its(:size) { should == 4 }
         end
       end
     end
@@ -317,16 +323,18 @@ module Albizia
       end
 
       context "The maximum value of the tree" do
-        it "should return the correct value" do
-          node = subject.add 20
-          subject.find(20).should == node
+        context "should return the correct value" do
+          before(:each) { @node = subject.add 20 }
+
+          it { subject.find(20).should == @node }
         end
       end
 
       context "A value which is lower than the root's value" do
-        it "should return the correct value" do
-          node = subject.add 3
-          subject.find(3).should == node
+        context "should return the correct value" do
+          before(:each) { @node = subject.add 3 }
+
+          it { subject.find(3).should == @node }
         end
       end
 
