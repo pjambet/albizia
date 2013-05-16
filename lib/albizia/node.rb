@@ -55,12 +55,12 @@ module Albizia
     # Available options :
     #   initial : this will mark the current node as a root.
     #
-    def height(opts={})
-      current_height = (root? || opts[:initial]) ? 0 : 1
+    def height(initial: false)
+      current_height = (root? || initial) ? 0 : 1
 
       if empty?
         -1
-      elsif (root? && leaf?) || (opts[:initial] && leaf?)
+      elsif (root? && leaf?) || (initial && leaf?)
         0
       elsif leaf?
         1
@@ -326,8 +326,8 @@ module Albizia
     #
     def detach
       self.tap do
-        %w(parent left_child right_child).each do |attr|
-          send :"#{attr}=", nil
+        %i(parent= left_child= right_child=).each do |attr|
+          send attr, nil
         end
       end
     end
