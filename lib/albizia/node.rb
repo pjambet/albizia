@@ -1,7 +1,6 @@
 
 module Albizia
 
-  # Define exceptions
   AlreadyExistingNodeException = Class.new(StandardError)
   NodeNotFoundError            = Class.new(StandardError)
 

@@ -2,78 +2,54 @@ require "spec_helper"
 
 module Albizia
   describe Node do
-    describe "#init" do
-      context "Without params" do
+    describe '#init' do
+      context 'Without params' do
         subject { Node.new }
 
         it { should be_empty }
-
-        it "should have a height of -1" do
-          subject.height.should == -1
-        end
+        it { subject.height.should == -1 }
       end
 
-      context "With an integer param" do
+      context 'With an integer param' do
         subject { Node.new(@v) }
         before(:each) { @v = 0 }
 
         it { should_not be_empty }
         it { should be_root }
         it { should be_leaf }
-
-        it "should have length equals to 0" do
-          subject.height.should == 0
-        end
-
-        it "should have the assigned value" do
-          subject.value.should == @v
-        end
+        its(:height) { should == 0 }
+        its(:value) { should == @v }
       end
     end
 
-    describe "#add" do
-      context "To an empty tree" do
+    describe '#add' do
+      context 'To an empty tree' do
         subject { Node.new }
         before(:each) { subject.add(5) }
 
-        it "should be inserted at the root" do
-
-          subject.value.should == 5
-          subject.parent.should be_nil
-        end
-
         it { should be_leaf }
-
-        it "should have a height of 0" do
-          subject.height.should == 0
-        end
+        its(:value) { should == 5 }
+        its(:parent) { should be_nil }
+        its(:height) { should == 0 }
       end
 
       context "To an almost empty tree" do
         subject { Node.new(5) }
 
         context "A greater value than root's value" do
-          before(:each) do
-            subject.add(10)
-          end
+          before(:each) { subject.add(10) }
 
           it { should be_root }
           it { should_not be_leaf }
 
-          it "should be inserted on the right" do
-            subject.right_child.should_not be_empty
-            subject.right_child.value.should == 10
-            subject.left_child.should be_nil
-          end
+          its(:right_child) { should_not be_empty }
+          its(:left_child) { should be_nil }
+          its('right_child.value') { should == 10 }
 
-          it "should have a height of 1" do
-            subject.should_not be_empty
-            subject.right_child.should_not be_nil
-            subject.right_child.should be_leaf
-            subject.left_child.should be_nil
-
-            subject.height.should == 1
-          end
+          it { should_not be_empty }
+          its(:right_child) { should_not be_nil }
+          its(:right_child) { should be_leaf }
+          its(:height) { should == 1 }
         end
 
         context "A lower value than root's value" do
@@ -82,16 +58,11 @@ module Albizia
           end
 
           it { should_not be_leaf }
+          its(:left_child) { should_not be_empty }
+          its('left_child.value') { should == 1 }
+          its(:right_child) { should be_nil }
 
-          it "should be inserted on the left" do
-            subject.left_child.should_not be_empty
-            subject.left_child.value.should == 1
-            subject.right_child.should be_nil
-          end
-
-          it "should have a height of 1" do
-            subject.height.should == 1
-          end
+          it { subject.height.should == 1 }
         end
 
       end
@@ -105,77 +76,39 @@ module Albizia
 
         context "A greater value than root's value" do
           context "A greater value than the current max value" do
-            before(:each) do
-              subject.add(8)
-            end
+            before(:each) { subject.add(8) }
 
-            it "should be inserted on the right of the current right'est' node" do
-              subject.right_child.right_child.value.should == 8
-            end
-            it "should be the max" do
-              subject.max.value.should == 8
-            end
-            it "should be a leaf" do
-              subject.right_child.right_child.should be_leaf
-            end
-            it "should have a height of 2" do
-              subject.height.should == 2
-            end
+            its('right_child.right_child.value') { should == 8 }
+            its('max.value') { should == 8 }
+            its('right_child.right_child') { should be_leaf }
+            its(:height) { should == 2 }
           end
 
           context "A lower value than the current max value but greater than root's" do
-            before(:each) do
-              subject.add(6)
-            end
+            before(:each) { subject.add(6) }
 
-            it "should be inserted on the left of the current right'est' node" do
-              subject.right_child.left_child.value.should == 6
-            end
-            it "should be a leaf" do
-              subject.right_child.left_child.should be_leaf
-            end
-            it "should have a height of 2" do
-              subject.height.should == 2
-            end
+            its('right_child.left_child.value') { should == 6 }
+            its('right_child.left_child') { should be_leaf }
+            its(:height) { should == 2 }
           end
-
         end
 
         context "A lower value than root's value" do
           context "A lower value than current min" do
-            before(:each) do
-              subject.add(1)
-            end
-            it "should be inserted on the left of the current left'est' node " do
-              subject.left_child.left_child.value.should == 1
-            end
+            before(:each) { subject.add(1) }
 
-            it "should be a leaf" do
-              subject.left_child.left_child.should be_leaf
-            end
-
-            it "should be the min" do
-              subject.min.value.should == 1
-            end
-
-            it "should have a height of 2" do
-              subject.height.should == 2
-            end
+            its('left_child.left_child.value') { should == 1 }
+            its('left_child.left_child') { should be_leaf }
+            its('min.value') { should == 1 }
+            its(:height) { should == 2 }
           end
 
           context "A greater value than current min but still lower than root's " do
-            before(:each) do
-              subject.add(4)
-            end
-            it "should be inserted on the right of the current left'est' node" do
-              subject.left_child.right_child.value.should == 4
-            end
-            it "should be a leaf" do
-              subject.left_child.right_child.should be_leaf
-            end
-            it "should have a height of 2" do
-              subject.height.should == 2
-            end
+            before(:each) { subject.add(4) }
+
+            its('left_child.right_child.value') { should == 4 }
+            its('left_child.right_child') { should be_leaf }
+            its(:height) { should == 2 }
           end
         end
 
@@ -194,27 +127,22 @@ module Albizia
       subject { Node.new 10 }
 
       context "Empty tree" do
-        it "should return self" do
-          subject.root.should == subject
-        end
+        its(:root) { should == subject }
       end
 
       context "Tree with one element" do
-        before(:each) do
-          subject.parent = Node.new(20)
-        end
+        before(:each) { subject.parent = Node.new(20) }
 
-        it "should return subject's parent" do
-          subject.root.should == subject.parent
-        end
+        its(:root) { should == subject.parent }
       end
 
       context "Tree with more than one element" do
 
-        it "should return the same root for each descendant" do
+        context "should return the same root for each descendant" do
           5.times.map do |i|
-            node = subject.add(i)
-            node.root.should == subject
+            let(:node) { subject.add(i) }
+
+            it { node.root.should == subject }
           end
         end
       end
@@ -224,10 +152,7 @@ module Albizia
       context "Empty tree" do
         subject { Node.new }
 
-        it "should have a depth of 0" do
-          subject.depth.should == 0
-        end
-
+        its(:depth) { should == 0 }
       end
 
       context "Not empty tree" do
@@ -236,19 +161,21 @@ module Albizia
           Node.new(4).tap {|n| n.parent = parent }
         end
 
-        it "should have a depth of 1" do
-          subject.depth.should == 1
+        its(:depth) { should == 1 }
+
+        context "should have a depth of 2" do
+          before(:each) { subject.parent.parent = Node.new(20) }
+
+          its(:depth) { should == 2 }
         end
 
-        it "should have a depth of 2" do
-          subject.parent.parent = Node.new(20)
-          subject.depth.should == 2
-        end
+        context "should still have a depth of 2 after adding a child" do
+          before(:each) do
+            subject.parent.parent = Node.new(20)
+            subject.add(2)
+          end
 
-        it "should still have a depth of 2 after adding a child" do
-          subject.parent.parent = Node.new(20)
-          subject.add(2)
-          subject.depth.should == 2
+          its(:depth) { should == 2 }
         end
       end
     end
@@ -257,67 +184,72 @@ module Albizia
       context "Empty tree" do
         subject { Node.new }
 
-        it "should have a height of -1" do
-          subject.height.should == -1
-        end
+        its(:height) { should == -1 }
       end
 
       context "Tree with one element" do
         subject { Node.new 10 }
 
-        it "should have a height of 0" do
-          subject.height.should == 0
-        end
+        its(:height) { should == 0 }
       end
 
       context "Tree with more than one element" do
         subject { Node.new(10).tap { |n| n.add 4 } }
 
         context "Tree's root" do
-          it "should have a height of 1 after initialization" do
-            subject.height.should == 1
+
+          its(:height) { should == 1 }
+
+          context "should have a height of 1 after adding a new element at the same depth" do
+            before(:each) { subject.add 15 }
+
+            its(:height) { should == 1 }
           end
 
-          it "should have a height of 1 after adding a new element at the same depth" do
-            subject.add 15
-            subject.height.should == 1
-          end
+          context "should have a height of 2 after adding a child on the right" do
+            before(:each) do
+              subject.add 15
+              subject.add 20
+            end
 
-          it "should have a height of 2 after adding a child on the right" do
-            subject.add 15
-            subject.add 20
-            subject.height.should == 2
+            its(:height) { should == 2 }
           end
         end
 
         context "Nodes in a tree ('initial' option)" do
 
-          it "should return a height of 2 for the parent of a leaf's parent" do
-            subject.add 15
-            node = subject.add 20
-            subject.add 25
-            subject.add 30
+          context "should return a height of 2 for the parent of a leaf's parent" do
+            before(:each) do
+              subject.add 15
+              @node = subject.add 20
+              subject.add 25
+              subject.add 30
+            end
 
-            node.should_not be_leaf
-            node.height(initial: true).should == 2
+            it { @node.should_not be_leaf }
+            it { @node.height(initial: true).should == 2 }
           end
 
-          it "should return a height of 1 for the parent of a leaf" do
-            subject.add 15
-            node = subject.add 20
-            subject.add 30
+          context "should return a height of 1 for the parent of a leaf" do
+            before(:each) do
+              subject.add 15
+              @node = subject.add 20
+              subject.add 30
+            end
 
-            node.should_not be_leaf
-            node.height(initial: true).should == 1
+            it { @node.should_not be_leaf }
+            it { @node.height(initial: true).should == 1 }
           end
 
-          it "should return a height of 0 for a leaf" do
-            subject.add 15
-            subject.add 20
-            node = subject.add 30
+          context "should return a height of 0 for a leaf" do
+            before(:each) do
+              subject.add 15
+              subject.add 20
+              @node = subject.add 30
+            end
 
-            node.should be_leaf
-            node.height(initial: true).should == 0
+            it { @node.should be_leaf }
+            it { @node.height(initial: true).should == 0 }
           end
         end
       end
@@ -327,17 +259,13 @@ module Albizia
       context "Empty tree" do
         subject { Node.new }
 
-        it "should have a size of 0" do
-          subject.size.should == 0
-        end
+        it { subject.size.should == 0 }
       end
 
       context "Tree with one element" do
         subject { Node.new 5 }
 
-        it "should have a size of 1" do
-          subject.size.should == 1
-        end
+        it { subject.size.should == 1 }
       end
 
       context "Not empty tree" do
@@ -381,9 +309,10 @@ module Albizia
       end
 
       context "The minimum value of the tree" do
-        it "should return the correct value" do
-          node = subject.add 1
-          subject.find(1).should == node
+        context "should return the correct value" do
+          before(:each) { @node = subject.add 1 }
+
+          it { subject.find(1).should == @node }
         end
       end
 
@@ -402,17 +331,16 @@ module Albizia
       end
 
       context "A value which is greater than the root" do
-        it "should return the correct value"do
-          node = subject.add 12
-          subject.find(12).should == node
+        context "should return the correct value"do
+          before(:each) { @node = subject.add 12 }
+
+          it { subject.find(12).should == @node }
         end
       end
     end
 
     describe "#delete" do
-      subject do
-        Node.new 5
-      end
+      subject { Node.new 5 }
 
       after(:each) do
         subject.should be_valid
@@ -496,33 +424,31 @@ module Albizia
     end
 
     describe "ordered?" do
-      subject do
-        Node.new 10
-      end
+      subject { Node.new 10 }
 
       context "list with one element" do
-        it 'should be ordered' do
-          subject.should be_ordered
-        end
+        it { should be_ordered }
       end
 
       context "list with more than one element" do
 
         context "ordered list" do
-          it 'should be ordered' do
+          before(:each) do
             subject.add 5
             subject.add 15
-            subject.should be_ordered
           end
+
+          it { should be_ordered }
         end
 
         context "unordered list" do
-          it 'should be ordered' do
+          before(:each) do
             subject.add 5
             subject.add 15
             subject.left_child.value = 20
-            subject.should_not be_ordered
           end
+
+          it { should_not be_ordered }
         end
       end
     end
