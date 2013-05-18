@@ -1,2 +1,2 @@
-require "albizia/node"
-require "albizia/rb_node"
+require_relative "albizia/node"
+require_relative "albizia/rb_node"
