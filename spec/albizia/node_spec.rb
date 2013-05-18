@@ -457,5 +457,11 @@ module Albizia
       end
     end
 
+    describe '#to_a' do
+      subject(:node) { Node.new 5 }
+      before(:each) { node.add [1,2,10,20] }
+
+      it { node.to_a.should eq([1,2,5,10,20]) }
+    end
   end
 end

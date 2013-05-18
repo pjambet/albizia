@@ -209,7 +209,9 @@ module Albizia
     # It returns [2, 5, 6, 10, 12]
     #
     def to_a
-
+      list = []
+      traverse { |v| list << v }
+      list
     end
 
     #
@@ -225,7 +227,6 @@ module Albizia
     # It returns { :"5" => { :"2" => nil, :"10" => { :"6" => nil, :"12" => nil } } }
     #
     def to_hash
-
     end
 
     #
@@ -242,23 +243,23 @@ module Albizia
 
     end
 
-    def traverse &block
+    def traverse(&block)
       left_child.traverse(&block) if left_child
-      block_given? ? yield( @value ) : puts( @value )
+      block_given? ? yield(@value) : puts(@value)
       right_child.traverse(&block) if right_child
     end
     alias_method :in_order_traverse, :traverse
 
-    def pre_order_traverse &block
-      block_given? ? yield( @value ) : puts( @value )
+    def pre_order_traverse(&block)
+      block_given? ? yield(@value) : puts(@value)
       left_child.traverse(&block) if left_child
       right_child.traverse(&block) if right_child
     end
 
-    def post_order_traverse &block
+    def post_order_traverse(&block)
       left_child.traverse(&block) if left_child
       right_child.traverse(&block) if right_child
-      block_given? ? yield( @value ) : puts( @value )
+      block_given? ? yield(@value) : puts(@value)
     end
 
     def >(other)
@@ -284,8 +285,7 @@ module Albizia
     end
 
     def ordered?
-      list = []
-      traverse { |v| list << v }
+      list = to_a
       0..(list.size - 1).times do |i|
         return false if list[i] > list[i + 1]
       end
