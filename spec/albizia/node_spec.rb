@@ -352,9 +352,7 @@ module Albizia
           it { should be_root }
           it { should be_valid }
           it { should be_leaf }
-          it { @deleted_node.parent.should be_nil }
-          it { @deleted_node.left_child.should be_nil }
-          it { @deleted_node.right_child.should be_nil }
+          it { @deleted_node.should be_detached }
         end
       end
 
@@ -374,9 +372,7 @@ module Albizia
           it { lambda { subject.find 2 }.should raise_error NodeNotFoundError }
           it { should be_valid }
           its(:size) { should == 3 }
-          it { @deleted_node.parent.should be_nil }
-          it { @deleted_node.left_child.should be_nil }
-          it { @deleted_node.right_child.should be_nil }
+          it { @deleted_node.should be_detached }
         end
       end
 
@@ -390,9 +386,7 @@ module Albizia
           it { should be_valid }
           it { lambda { subject.find 20 }.should raise_error NodeNotFoundError }
           its(:size) { should == 3 }
-          it { @deleted_node.parent.should be_nil }
-          it { @deleted_node.left_child.should be_nil }
-          it { @deleted_node.right_child.should be_nil }
+          it { @deleted_node.should be_detached }
         end
       end
 
@@ -406,9 +400,7 @@ module Albizia
           its(:size) { should == 3 }
           it { should be_valid }
           it { lambda { subject.find 4 }.should raise_error NodeNotFoundError }
-          it { @deleted_node.parent.should be_nil }
-          it { @deleted_node.left_child.should be_nil }
-          it { @deleted_node.right_child.should be_nil }
+          it { @deleted_node.should be_detached }
         end
       end
 
@@ -422,9 +414,7 @@ module Albizia
           it { lambda { subject.find 10 }.should raise_error NodeNotFoundError }
           it { should be_valid }
           its(:size) { should == 3 }
-          it { @deleted_node.parent.should be_nil }
-          it { @deleted_node.left_child.should be_nil }
-          it { @deleted_node.right_child.should be_nil }
+          it { @deleted_node.should be_detached }
         end
       end
     end

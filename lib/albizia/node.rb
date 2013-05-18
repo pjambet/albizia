@@ -292,6 +292,10 @@ module Albizia
       true
     end
 
+    def detached?
+      parent.nil? and left_child.nil? and right_child.nil?
+    end
+
     private
 
     def insert_node(direction, v)
