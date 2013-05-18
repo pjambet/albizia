@@ -77,6 +77,7 @@ module Albizia
     # Siblings are nodes that share the same parent node.
     #
     def siblings
+      root.to_a.select{|node| node.depth == depth && node != self}
     end
 
     #
@@ -245,13 +246,13 @@ module Albizia
 
     def traverse(&block)
       left_child.traverse(&block) if left_child
-      block_given? ? yield(@value) : puts(@value)
+      block_given? ? yield(self) : puts(@value)
       right_child.traverse(&block) if right_child
     end
     alias_method :in_order_traverse, :traverse
 
     def pre_order_traverse(&block)
-      block_given? ? yield(@value) : puts(@value)
+      block_given? ? yield(self) : puts(@value)
       left_child.traverse(&block) if left_child
       right_child.traverse(&block) if right_child
     end
@@ -259,7 +260,7 @@ module Albizia
     def post_order_traverse(&block)
       left_child.traverse(&block) if left_child
       right_child.traverse(&block) if right_child
-      block_given? ? yield(@value) : puts(@value)
+      block_given? ? yield(self) : puts(@value)
     end
 
     def >(other)
