@@ -140,19 +140,23 @@ module Albizia
     # Add a node with value equals to v in the tree
     #
     def add(v)
-      if empty?
-        @value = v
-      elsif v > @value
-        if @right_child.nil?
-          insert_node :right, v
-        else
-          @right_child.add(v)
-        end
+      if v.is_a? Enumerable
+        v.each {|item| self.add(item)}
       else
-        if @left_child.nil?
-          insert_node :left, v
+        if empty?
+          @value = v
+        elsif v > @value
+          if @right_child.nil?
+            insert_node :right, v
+          else
+            @right_child.add(v)
+          end
         else
-          @left_child.add(v)
+          if @left_child.nil?
+            insert_node :left, v
+          else
+            @left_child.add(v)
+          end
         end
       end
     end

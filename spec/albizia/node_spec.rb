@@ -70,8 +70,7 @@ module Albizia
       context "To a non empty tree" do
         subject { Node.new(5) }
         before(:each) do
-          subject.add(3)
-          subject.add(7)
+          subject.add [3, 7]
         end
 
         context "A greater value than root's value" do
@@ -116,7 +115,7 @@ module Albizia
           it "should call the method 6 times" do
             node = Node.new 5
             node.expects(:insert_node).times(6)
-            6.times { |i| node.add i}
+            node.add 6.times
           end
         end
 
@@ -208,8 +207,7 @@ module Albizia
 
           context "should have a height of 2 after adding a child on the right" do
             before(:each) do
-              subject.add 15
-              subject.add 20
+              subject.add [15, 20]
             end
 
             its(:height) { should == 2 }
@@ -222,8 +220,7 @@ module Albizia
             before(:each) do
               subject.add 15
               @node = subject.add 20
-              subject.add 25
-              subject.add 30
+              subject.add [25, 30]
             end
 
             it { @node.should_not be_leaf }
@@ -243,8 +240,7 @@ module Albizia
 
           context "should return a height of 0 for a leaf" do
             before(:each) do
-              subject.add 15
-              subject.add 20
+              subject.add [15, 20]
               @node = subject.add 30
             end
 
@@ -279,8 +275,7 @@ module Albizia
 
         context "should have a size of 3 after adding an element" do
           before(:each) do
-            subject.add 10
-            subject.add 20
+            subject.add [10, 20]
           end
 
           its(:size) { should == 3 }
@@ -288,9 +283,7 @@ module Albizia
 
         context "should have a size of 4 after adding another child" do
           before(:each) do
-            subject.add 10
-            subject.add 20
-            subject.add 2
+            subject.add [10, 20, 2]
           end
 
           its(:size) { should == 4 }
@@ -301,10 +294,7 @@ module Albizia
     describe "#find" do
       subject do
         Node.new(5).tap do |n|
-          n.add 2
-          n.add 4
-          n.add 10
-          n.add 15
+          n.add [2,4,10,15]
         end
       end
 
@@ -377,9 +367,7 @@ module Albizia
       context "The minimum value of the tree" do
         context "should delete the value" do
           before(:each) do
-            subject.add 2
-            subject.add 15
-            subject.add 10
+            subject.add [2, 15, 10]
             @deleted_node = subject.delete 2
           end
 
@@ -395,9 +383,7 @@ module Albizia
       context "The maximum value of the tree" do
         context "should delete the value" do
           before(:each) do
-            node = subject.add 2
-            node = subject.add 15
-            node = subject.add 20
+            subject.add [2, 15, 20]
             @deleted_node = subject.delete 20
           end
 
@@ -413,9 +399,7 @@ module Albizia
       context "A value which is lower than the root's value" do
         context "should delete the value" do
           before(:each) do
-            subject.add 2
-            subject.add 4
-            subject.add 20
+            subject.add [2, 4, 20]
             @deleted_node = subject.delete 4
           end
 
@@ -431,9 +415,7 @@ module Albizia
       context "A value which is greater than the root" do
         context "should delete the value" do
           before(:each) do
-            subject.add 2
-            subject.add 10
-            subject.add 12
+            subject.add [2, 10, 12]
             @deleted_node = subject.delete 10
           end
 
@@ -458,8 +440,7 @@ module Albizia
 
         context "ordered list" do
           before(:each) do
-            subject.add 5
-            subject.add 15
+            subject.add [5, 15]
           end
 
           it { should be_ordered }
@@ -467,8 +448,7 @@ module Albizia
 
         context "unordered list" do
           before(:each) do
-            subject.add 5
-            subject.add 15
+            subject.add [5, 15]
             subject.left_child.value = 20
           end
 
