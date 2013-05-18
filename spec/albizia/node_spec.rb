@@ -457,14 +457,15 @@ module Albizia
     describe '#siblings' do
       subject(:node) { Node.new 5 }
       before(:each) do
-        @node1 = node.add 1
         @node2 = node.add 2
         @node10 = node.add 10
+        @node6 = node.add 6
+        @node1 = node.add 1
       end
-      let!(:new_node) { node.add 20 }
+      let!(:new_node) { node.add 12 }
 
-      it { new_node.siblings.length.should eq(1) }
-      it { new_node.siblings.should match_array([@node2]) }
+      it { new_node.siblings.should match_array([@node1, @node6]) }
+      it { @node10.siblings.should match_array([@node2]) }
     end
   end
 end
