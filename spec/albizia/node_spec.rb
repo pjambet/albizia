@@ -11,14 +11,14 @@ module Albizia
       end
 
       context 'With an integer param' do
-        subject { Node.new(@v) }
-        before(:each) { @v = 0 }
+        subject { Node.new(v) }
+        let(:v) { 0 }
 
         it { should_not be_empty }
         it { should be_root }
         it { should be_leaf }
         its(:height) { should == 0 }
-        its(:value) { should == @v }
+        its(:value) { should == v }
       end
     end
 
@@ -316,33 +316,33 @@ module Albizia
 
       context "The minimum value of the tree" do
         context "should return the correct value" do
-          before(:each) { @node = subject.add 1 }
+          let!(:node) { subject.add 1 }
 
-          it { subject.find(1).should == @node }
+          it { subject.find(1).should == node }
         end
       end
 
       context "The maximum value of the tree" do
         context "should return the correct value" do
-          before(:each) { @node = subject.add 20 }
+          let!(:node) { subject.add 20 }
 
-          it { subject.find(20).should == @node }
+          it { subject.find(20).should == node }
         end
       end
 
       context "A value which is lower than the root's value" do
         context "should return the correct value" do
-          before(:each) { @node = subject.add 3 }
+          let!(:node) { subject.add 3 }
 
-          it { subject.find(3).should == @node }
+          it { subject.find(3).should == node }
         end
       end
 
       context "A value which is greater than the root" do
         context "should return the correct value"do
-          before(:each) { @node = subject.add 12 }
+          let!(:node) { subject.add 12 }
 
-          it { subject.find(12).should == @node }
+          it { subject.find(12).should == node }
         end
       end
     end
@@ -350,21 +350,21 @@ module Albizia
     describe "#delete" do
       subject { Node.new 5 }
 
-      after(:each) do
-        subject.should be_valid
-      end
-
       context "The root value" do
-        it "should delete the value" do
-          node = subject.add 2
-          deleted_node = subject.delete 2
-          lambda { subject.find 2 }.should raise_error NodeNotFoundError
-          subject.size.should == 1
-          subject.should be_root
-          subject.should be_leaf
-          deleted_node.parent.should be_nil
-          deleted_node.left_child.should be_nil
-          deleted_node.right_child.should be_nil
+        context "should delete the value" do
+          before(:each) do
+            node = subject.add 2
+            @deleted_node = subject.delete 2
+          end
+
+          it { lambda { subject.find 2 }.should raise_error NodeNotFoundError }
+          its(:size) { should == 1 }
+          it { should be_root }
+          it { should be_valid }
+          it { should be_leaf }
+          it { @deleted_node.parent.should be_nil }
+          it { @deleted_node.left_child.should be_nil }
+          it { @deleted_node.right_child.should be_nil }
         end
       end
 
@@ -375,58 +375,74 @@ module Albizia
       end
 
       context "The minimum value of the tree" do
-        it "should delete the value" do
-          node = subject.add 2
-          node = subject.add 15
-          node = subject.add 10
-          deleted_node = subject.delete 2
-          lambda { subject.find 2 }.should raise_error NodeNotFoundError
-          subject.size.should == 3
-          deleted_node.parent.should be_nil
-          deleted_node.left_child.should be_nil
-          deleted_node.right_child.should be_nil
+        context "should delete the value" do
+          before(:each) do
+            subject.add 2
+            subject.add 15
+            subject.add 10
+            @deleted_node = subject.delete 2
+          end
+
+          it { lambda { subject.find 2 }.should raise_error NodeNotFoundError }
+          it { should be_valid }
+          its(:size) { should == 3 }
+          it { @deleted_node.parent.should be_nil }
+          it { @deleted_node.left_child.should be_nil }
+          it { @deleted_node.right_child.should be_nil }
         end
       end
 
       context "The maximum value of the tree" do
-        it "should delete the value" do
-          node = subject.add 2
-          node = subject.add 15
-          node = subject.add 20
-          deleted_node = subject.delete 20
-          lambda { subject.find 20 }.should raise_error NodeNotFoundError
-          subject.size.should == 3
-          deleted_node.parent.should be_nil
-          deleted_node.left_child.should be_nil
-          deleted_node.right_child.should be_nil
+        context "should delete the value" do
+          before(:each) do
+            node = subject.add 2
+            node = subject.add 15
+            node = subject.add 20
+            @deleted_node = subject.delete 20
+          end
+
+          it { should be_valid }
+          it { lambda { subject.find 20 }.should raise_error NodeNotFoundError }
+          its(:size) { should == 3 }
+          it { @deleted_node.parent.should be_nil }
+          it { @deleted_node.left_child.should be_nil }
+          it { @deleted_node.right_child.should be_nil }
         end
       end
 
       context "A value which is lower than the root's value" do
-        it "should delete the value" do
-          node = subject.add 2
-          node = subject.add 4
-          node = subject.add 20
-          deleted_node = subject.delete 4
-          lambda { subject.find 4 }.should raise_error NodeNotFoundError
-          subject.size.should == 3
-          deleted_node.parent.should be_nil
-          deleted_node.left_child.should be_nil
-          deleted_node.right_child.should be_nil
+        context "should delete the value" do
+          before(:each) do
+            subject.add 2
+            subject.add 4
+            subject.add 20
+            @deleted_node = subject.delete 4
+          end
+
+          its(:size) { should == 3 }
+          it { should be_valid }
+          it { lambda { subject.find 4 }.should raise_error NodeNotFoundError }
+          it { @deleted_node.parent.should be_nil }
+          it { @deleted_node.left_child.should be_nil }
+          it { @deleted_node.right_child.should be_nil }
         end
       end
 
       context "A value which is greater than the root" do
-        it "should delete the value" do
-          node = subject.add 2
-          node = subject.add 10
-          node = subject.add 12
-          deleted_node = subject.delete 10
-          lambda { subject.find 10 }.should raise_error NodeNotFoundError
-          subject.size.should == 3
-          deleted_node.parent.should be_nil
-          deleted_node.left_child.should be_nil
-          deleted_node.right_child.should be_nil
+        context "should delete the value" do
+          before(:each) do
+            subject.add 2
+            subject.add 10
+            subject.add 12
+            @deleted_node = subject.delete 10
+          end
+
+          it { lambda { subject.find 10 }.should raise_error NodeNotFoundError }
+          it { should be_valid }
+          its(:size) { should == 3 }
+          it { @deleted_node.parent.should be_nil }
+          it { @deleted_node.left_child.should be_nil }
+          it { @deleted_node.right_child.should be_nil }
         end
       end
     end
