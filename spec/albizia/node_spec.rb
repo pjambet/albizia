@@ -501,7 +501,25 @@ module Albizia
 
         it { should_not be_full }
       end
+    end
 
+    describe '#balanced?' do
+      subject(:node) { Node.new 10 }
+      context 'a balanced tree' do
+        before(:each) do
+          node.add [2,1,5,15,12,20]
+        end
+
+        it { should be_balanced }
+      end
+
+      context 'a non balanced tree' do
+        before(:each) do
+          node.add [1,2,3,4]
+        end
+
+        it { should_not be_balanced }
+      end
     end
 
   end

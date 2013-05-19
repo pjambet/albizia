@@ -121,6 +121,9 @@ module Albizia
     end
 
     def balanced?
+      left_height = left_child ? left_child.height(initial: true) : 0
+      right_height = right_child ? right_child.height(initial: true) : 0
+      (left_height - right_height).abs <= 1
     end
 
     def degenerated?
