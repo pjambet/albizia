@@ -185,17 +185,14 @@ module Albizia
     # Returns the node with value v if it exists
     #
     def find(v)
-      raise_not_found = lambda { raise NodeNotFoundError.new }
-      if empty?
-        raise_not_found.call
-      elsif leaf? && @value != v
-        raise_not_found.call
+      if empty? || (leaf? && @value != v)
+        raise NodeNotFoundError
       elsif @value == v
         self
       elsif v < @value
-        @left_child.nil? ? raise_not_found.call : @left_child.find(v)
+        @left_child.nil? ? raise(NodeNotFoundError) : @left_child.find(v)
       else
-        @right_child.nil? ? raise_not_found.call : @right_child.find(v)
+        @right_child.nil? ? raise(NodeNotFoundError) : @right_child.find(v)
       end
     end
 
@@ -331,12 +328,17 @@ module Albizia
       parent.nil? and left_child.nil? and right_child.nil?
     end
 
+    def node_class
+      self.class
+    end
+
     private
 
     def insert_node(direction, v)
       raise AlreadyExistingNode.new if send(:"#{direction}_child") != nil
-      new_node = Node.new(v).tap { |n| n.parent = self }
+      new_node = node_class.new(v).tap { |n| n.parent = self }
       send :"#{direction}_child=", new_node
+      new_node
     end
 
     #
