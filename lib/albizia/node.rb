@@ -84,6 +84,11 @@ module Albizia
     # All nodes above current node
     #
     def ancestors
+      if root?
+        []
+      else
+        parent.ancestors.push parent
+      end
     end
 
     #

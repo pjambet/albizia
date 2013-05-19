@@ -468,5 +468,20 @@ module Albizia
       it { @node10.siblings.should match_array([@node2]) }
     end
 
+    describe '#ancestors' do
+      subject(:node) { Node.new 10 }
+      before(:each) do
+        @node2 = node.add 2
+        @node11 = node.add 11
+        @node6 = node.add 6
+        @node1 = node.add 1
+      end
+      let!(:new_node) { node.add 12 }
+
+      its(:ancestors) { should eq([]) }
+      it { @node11.ancestors.should match_array([node]) }
+      it { new_node.ancestors.should match_array([@node11, node]) }
+    end
+
   end
 end
