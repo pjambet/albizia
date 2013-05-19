@@ -241,7 +241,23 @@ module Albizia
     #    6  12
     #
     def draw
-
+      queue = []
+      queue.push self
+      current_depth = 0
+      while queue.length != 0
+        v = queue.shift
+        if block_given?
+          yield v
+        else
+          if current_depth != v.depth
+            current_depth = v.depth
+            print "\n"
+          end
+          print "#{v.value} "
+        end
+        queue.push v.left_child if v.left_child
+        queue.push v.right_child if v.right_child
+      end
     end
 
     def traverse(&block)

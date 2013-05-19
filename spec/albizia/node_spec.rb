@@ -467,5 +467,6 @@ module Albizia
       it { new_node.siblings.should match_array([@node1, @node6]) }
       it { @node10.siblings.should match_array([@node2]) }
     end
+
   end
 end
