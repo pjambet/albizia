@@ -483,5 +483,26 @@ module Albizia
       it { new_node.ancestors.should match_array([@node11, node]) }
     end
 
+
+    describe '#full?' do
+      subject(:node) { Node.new 10 }
+      context 'a full tree' do
+        before(:each) do
+          node.add [2,1,5,15,12,20]
+        end
+
+        it { should be_full }
+      end
+
+      context 'a non full tree' do
+        before(:each) do
+          node.add [1,2,3,4]
+        end
+
+        it { should_not be_full }
+      end
+
+    end
+
   end
 end

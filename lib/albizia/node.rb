@@ -112,6 +112,12 @@ module Albizia
     # A tree is full if every nodes except leaves has 2 children
     #
     def full?
+      traverse do |node|
+        if !node.leaf? && (node.right_child.nil? || node.right_child.nil?)
+          return false
+        end
+      end
+      true
     end
 
     def balanced?
