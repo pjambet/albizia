@@ -127,6 +127,10 @@ module Albizia
     end
 
     def degenerated?
+      traverse do |node|
+        return false if node.left_child && node.right_child
+      end
+      true
     end
 
     #

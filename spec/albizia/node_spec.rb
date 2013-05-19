@@ -522,5 +522,24 @@ module Albizia
       end
     end
 
+    describe '#degenerated?' do
+      subject(:node) { Node.new 10 }
+      context 'a degenerated tree' do
+        before(:each) do
+          node.add [11,12,13,14,15]
+        end
+
+        it { should be_degenerated }
+      end
+
+      context 'a non degenerated tree' do
+        before(:each) do
+          node.add [2,1,3,4]
+        end
+
+        it { should_not be_degenerated }
+      end
+    end
+
   end
 end
